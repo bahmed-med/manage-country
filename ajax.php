@@ -49,9 +49,10 @@
 					'id' => $rows['id'],
 					'name' => $rows['name'],
 					'action' => '
-						<input type ="button" onclick= "edit('.$rows["id"].')" value="edit"  class="btn btn-primary">
+						<input type ="button" onclick= "viewOredit('.$rows["id"].',  \'edit\')" value="edit"  class="btn btn-primary">
+						<input type ="button" onclick= "viewOredit('.$rows["id"].',  \'view\')" value="view"  class="btn">
 						<input type ="button" value="delete"  class="btn btn-danger">
-						<input type ="button" value="view"  class="btn">
+						
 					'
 				];
 			}

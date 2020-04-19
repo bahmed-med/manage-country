@@ -34,14 +34,25 @@
 				</button>
 			  </div>
 			  <div class="modal-body">
-				 <input type="text" class="form-control" placeholder="name" id="name"> </br>
-				 <textarea type="text" class="form-control" placeholder="short description" id="shortDescription"></textarea>  </br>
-				 <textarea type="text" class="form-control" placeholder="long description" id="longDescription"> </textarea> </br>
-			     <input type="hidden" id="id">
+			  	<div id="editContent">
+					 <input type="text" class="form-control" placeholder="name" id="name"> </br>
+					 <textarea type="text" class="form-control" placeholder="short description" id="shortDescription"></textarea>  </br>
+					 <textarea type="text" class="form-control" placeholder="long description" id="longDescription"> </textarea> </br>
+				     <input type="hidden" id="id">
+			     </div>
+			     <div id="viewContent" style="display: none;">
+			     	<h3> Short description</h3>
+			     	<div id="shortDescriptionView"></div>
+			     	<hr>
+			        <h3> Long description</h3>
+			     	<div id="longDescriptionView" style="overflow-y: scroll; height: 300px"></div>
+			     	
+			     </div>
+
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" id="manageBtn" class="btn btn-primary"   onclick= "namageData('addNew')" >Save changes</button>
+				<button type="button" id="manageBtn" class="btn btn-primary"   onclick= "namageData('addNew')" >Save</button>
 			  </div>
 			</div>
 		  </div>
@@ -79,12 +90,22 @@
 
 				$("#addCountry").modal('show');
 	    	});
+
+	    	$("#addCountry").on('hidden.bs.modal', function(){
+	    		$("#editContent").fadeIn();
+				$("#viewContent").fadeOut();
+				$("#shortDescription").val("");
+				$("#longDescription").val("");
+				$("#name").val("");
+				$("#manageBtn").attr('value', 'add new').attr('onclick', "namageData('addNew')").fadeIn();
+				$(".modal-title").html("Add country");
+	    	})
 	
 	  		getAllData();
 
 		});
 
-		function edit(id){
+		function viewOredit(id, type){
 			$.ajax({
 					url: 'ajax.php',
 					method: 'POST',
@@ -94,12 +115,27 @@
 						id: id,
 					
 					}, success: function(response) {
-						    $("#id").val(response.id);
+
+						if (type == 'view') {
+							$("#editContent").fadeOut();
+							$("#viewContent").fadeIn();
+							$("#shortDescriptionView").html(response.shortDescription);
+							$("#longDescriptionView").html(response.longDescription);
+							$("#manageBtn").fadeOut();
+
+						}else {
+							$("#editContent").fadeIn();
+							$("#viewContent").fadeOut();
+							$("#id").val(response.id);
 							$("#name").val(response.name);
 							$("#shortDescription").val(response.shortDescription);
 							$("#longDescription").val(response.longDescription);
-							$("#addCountry").modal('show');
 							$("#manageBtn").attr('value', 'Save change').attr('onclick', "namageData('update')")
+						}
+						    
+						$("#addCountry").modal('show');
+						$(".modal-title").html(response.name);
+						
 
 						}
 					
