@@ -1,118 +1,103 @@
 <?php
 
-	$conn = new mysqli("db", "root", "root", "gestion");
-	/*
-	$sql = "SELECT id, name FROM country ";
+    $conn = new mysqli("db", "root", "root", "gestion");
 
-	$resultset = mysqli_query($conn, $sql) or die("database error:". mysqli_error($conn));
+    if(isset($_POST['key']))
+    {
 
-	$data = array();
+        $conn = new mysqli("db", "root", "root", "gestion");
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
 
-	while( $rows = mysqli_fetch_assoc($resultset) ) {
-		$data[] = [
-			'id' => $rows['id'],
-			'name' => $rows['name']
-		];
+        if($_POST['key'] == 'getAllData'){
 
-	}
+            $sql = "SELECT id, name FROM country ";
 
-	$results = array('data' => $data );
+            $resultset = mysqli_query($conn, $sql) or die("database error:". mysqli_error($conn));
 
+            $data = array();
 
-	echo json_encode($results);
+            while( $rows = mysqli_fetch_assoc($resultset) ) {
+                $data[] = [
+                    'id' => $rows['id'],
+                    'name' => $rows['name'],
+                    'action' => '
+                        <input type ="button" onclick= "viewOredit('.$rows["id"].',  \'edit\')" value="edit"  class="btn btn-primary">
+                        <input type ="button" onclick= "viewOredit('.$rows["id"].',  \'view\')" value="view"  class="btn">
+                        <input type ="button" onclick= "deleteRow('.$rows["id"].')" value="delete"  class="btn btn-danger">
+                        
+                    '
+                ];
+            }
 
-    //exit;
-			
-	*/
+            $results = array('data' => $data );
 
-	
-	
-	if(isset($_POST['key']))
-	{
+            echo json_encode($results);
 
-	    $conn = new mysqli("db", "root", "root", "gestion");
-		// Check connection
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
+        }
+        
+        
+        if($_POST['key'] == 'addNew'){
 
-		if($_POST['key'] == 'getAllData'){
-
-			$sql = "SELECT id, name FROM country ";
-
-			$resultset = mysqli_query($conn, $sql) or die("database error:". mysqli_error($conn));
-
-			$data = array();
-
-			while( $rows = mysqli_fetch_assoc($resultset) ) {
-				$data[] = [
-					'id' => $rows['id'],
-					'name' => $rows['name'],
-					'action' => '
-						<input type ="button" onclick= "viewOredit('.$rows["id"].',  \'edit\')" value="edit"  class="btn btn-primary">
-						<input type ="button" onclick= "viewOredit('.$rows["id"].',  \'view\')" value="view"  class="btn">
-						<input type ="button" value="delete"  class="btn btn-danger">
-						
-					'
-				];
-			}
-
-			$results = array('data' => $data );
-
-			echo json_encode($results);
-
-		}
-		
-	    
-	    if($_POST['key'] == 'addNew'){
-
-	    	$name = $conn->real_escape_string($_POST['name']);
-			$shortDescription = $conn->real_escape_string($_POST['shortDescription']);
-			$longDescription= $conn->real_escape_string($_POST['longDescription']);
+            $name = $conn->real_escape_string($_POST['name']);
+            $shortDescription = $conn->real_escape_string($_POST['shortDescription']);
+            $longDescription= $conn->real_escape_string($_POST['longDescription']);
 
 
-	    	$sql = $conn->query("SELECT id FROM country  WHERE name = $name");
+            $sql = $conn->query("SELECT id FROM country  WHERE name = $name");
 
-	    	if($sql  && $sql->num_rows > 0){
-	    		exit('this country is aulready exist');
-	    	} else {
-	    		$sql = $conn->query("INSERT INTO country (name, shortDescription, longDescription ) VALUES('$name','$shortDescription', '$longDescription')");
-	    		exit('country has inserted')	;
-	    	}
-	    }
+            if($sql  && $sql->num_rows > 0){
+                exit('this country is aulready exist');
+            } else {
+                $sql = $conn->query("INSERT INTO country (name, shortDescription, longDescription ) VALUES('$name','$shortDescription', '$longDescription')");
+                exit('country has inserted')    ;
+            }
+        }
 
-	    if($_POST['key'] == 'getRowdata'){
+        if($_POST['key'] == 'getRowdata'){
 
-	    	$id = $conn->real_escape_string($_POST['id']);
+            $id = $conn->real_escape_string($_POST['id']);
 
-	    	$sql = $conn->query("SELECT id, name, shortDescription, longDescription FROM country  WHERE id = $id");
+            $sql = $conn->query("SELECT id, name, shortDescription, longDescription FROM country  WHERE id = $id");
 
-	    	$data = $sql->fetch_array();
+            $data = $sql->fetch_array();
 
-	    	$response = [
-	    		'id' => $data['id'],
-	    		'name' => $data['name'],
-	    		'shortDescription' => $data['shortDescription'],
-	    		'longDescription' => $data['longDescription'],
-	    	];
+            $response = [
+                'id' => $data['id'],
+                'name' => $data['name'],
+                'shortDescription' => $data['shortDescription'],
+                'longDescription' => $data['longDescription'],
+            ];
 
-	    	echo json_encode($response);
-	    }
+            echo json_encode($response);
+        }
 
-	    if($_POST['key'] == 'update'){
-	    	//owID: editRowID.val()
-	    	$id = $conn->real_escape_string($_POST['id']);
-	    	$name = $conn->real_escape_string($_POST['name']);
-			$shortDescription = $conn->real_escape_string($_POST['shortDescription']);
-			$longDescription= $conn->real_escape_string($_POST['longDescription']);
+        if($_POST['key'] == 'update'){
+            //owID: editRowID.val()
+            $id = $conn->real_escape_string($_POST['id']);
+            $name = $conn->real_escape_string($_POST['name']);
+            $shortDescription = $conn->real_escape_string($_POST['shortDescription']);
+            $longDescription= $conn->real_escape_string($_POST['longDescription']);
 
-	    	$sql = $conn->query("UPDATE country SET name='$name', shortDescription='$shortDescription', 
-	    		longDescription='$longDescription' WHERE id = '$id'");
-	    	echo 'success';
-	    }
+            $sql = $conn->query("UPDATE country SET name='$name', shortDescription='$shortDescription', 
+                longDescription='$longDescription' WHERE id = '$id'");
+            echo 'success';
+        }
+
+        if($_POST['key'] == 'deleteRow') {
+
+            $id = $conn->real_escape_string($_POST['id']);
+
+            $sql = $conn->query("DELETE FROM country WHERE id = '$id'");
+
+            exit("The row has been deleted");
+
+        }
 
 }else{
-	exit('KO');
+    exit('KO');
 }
 
 ?>

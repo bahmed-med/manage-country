@@ -1,6 +1,6 @@
 <?php
 
-	
+    
 
 ?>
 
@@ -22,203 +22,220 @@
 </head>
 <body>
 
-	<div  class="container"   style="margin-top:30px"> 
-	
-		<div class="modal fade" id="addCountry" >
-		  <div class="modal-dialog" role="document">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Add country</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
-			  </div>
-			  <div class="modal-body">
-			  	<div id="editContent">
-					 <input type="text" class="form-control" placeholder="name" id="name"> </br>
-					 <textarea type="text" class="form-control" placeholder="short description" id="shortDescription"></textarea>  </br>
-					 <textarea type="text" class="form-control" placeholder="long description" id="longDescription"> </textarea> </br>
-				     <input type="hidden" id="id">
-			     </div>
-			     <div id="viewContent" style="display: none;">
-			     	<h3> Short description</h3>
-			     	<div id="shortDescriptionView"></div>
-			     	<hr>
-			        <h3> Long description</h3>
-			     	<div id="longDescriptionView" style="overflow-y: scroll; height: 300px"></div>
-			     	
-			     </div>
+    <div  class="container"   style="margin-top:30px"> 
+    
+        <div class="modal fade" id="addCountry" >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add country</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="editContent">
+                     <input type="text" class="form-control" placeholder="name" id="name"> </br>
+                     <textarea type="text" class="form-control" placeholder="short description" id="shortDescription"></textarea>  </br>
+                     <textarea type="text" class="form-control" placeholder="long description" id="longDescription"> </textarea> </br>
+                     <input type="hidden" id="id">
+                 </div>
+                 <div id="viewContent" style="display: none;">
+                    <h3> Short description</h3>
+                    <div id="shortDescriptionView"></div>
+                    <hr>
+                    <h3> Long description</h3>
+                    <div id="longDescriptionView" style="overflow-y: scroll; height: 300px"></div>
+                    
+                 </div>
 
-			  </div>
-			  <div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" id="manageBtn" class="btn btn-primary"   onclick= "namageData('addNew')" >Save</button>
-			  </div>
-			</div>
-		  </div>
-		</div>
-		<div class="row">
-		    <div class="col-md-8 offset-md-2">
-			    <h1>  Ma gestion : </h1>
-				<input class="btn btn-primary" type="button" value="add new" id="addNew"  style="float:right">
-				
-				</br></br></br>
-				
-				<table class="table table-striped">
-					  <thead>
-						<tr>
-						  <th scope="col">Id</th>
-						  <th scope="col">Country name</th>
-						  <th scope="col">Action</th>
-					  </thead>
-					  <tbody>
-					  </tbody>
-				</table>	  
-			</div>
-		
-		</div>
-	
-	
-	</div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="manageBtn" class="btn btn-primary"   onclick= "namageData('addNew')" >Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1>  Ma gestion : </h1>
+                <input class="btn btn-primary" type="button" value="add new" id="addNew"  style="float:right">
+                
+                </br></br></br>
+                
+                <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Country name</th>
+                          <th scope="col">Action</th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                </table>      
+            </div>
+        
+        </div>
+    
+    
+    </div>
 
  
-	<script type="text/javascript">
-		 
-		$(document).ready(function(){
+    <script type="text/javascript">
+         
+        $(document).ready(function(){
 
-		  	$("#addNew").click(function(){
+            $("#addNew").click(function(){
 
-				$("#addCountry").modal('show');
-	    	});
+                $("#addCountry").modal('show');
+            });
 
-	    	$("#addCountry").on('hidden.bs.modal', function(){
-	    		$("#editContent").fadeIn();
-				$("#viewContent").fadeOut();
-				$("#shortDescription").val("");
-				$("#longDescription").val("");
-				$("#name").val("");
-				$("#manageBtn").attr('value', 'add new').attr('onclick', "namageData('addNew')").fadeIn();
-				$(".modal-title").html("Add country");
-	    	})
-	
-	  		getAllData();
+            $("#addCountry").on('hidden.bs.modal', function(){
+                $("#editContent").fadeIn();
+                $("#viewContent").fadeOut();
+                $("#shortDescription").val("");
+                $("#longDescription").val("");
+                $("#name").val("");
+                $("#manageBtn").attr('value', 'add new').attr('onclick', "namageData('addNew')").fadeIn();
+                $(".modal-title").html("Add country");
+            })
+    
+            getAllData();
 
-		});
+        });
 
-		function viewOredit(id, type){
-			$.ajax({
-					url: 'ajax.php',
-					method: 'POST',
-					dataType: 'json',
-					data: {
-						key: 'getRowdata',
-						id: id,
-					
-					}, success: function(response) {
+        function deleteRow(id){
+            if(confirm("Are you sur???")){
+                $.ajax({
+                    url: 'ajax.php',
+                    method: 'POST',
+                    dataType: 'text',
+                    data: {
+                        key: 'deleteRow',
+                        id: id,
+                    
+                    }, success: function(response) {
+                        $('.table').DataTable().ajax.reload();
+                    }
+                })
+            }
+        }
 
-						if (type == 'view') {
-							$("#editContent").fadeOut();
-							$("#viewContent").fadeIn();
-							$("#shortDescriptionView").html(response.shortDescription);
-							$("#longDescriptionView").html(response.longDescription);
-							$("#manageBtn").fadeOut();
+        function viewOredit(id, type){
+            $.ajax({
+                    url: 'ajax.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        key: 'getRowdata',
+                        id: id,
+                    
+                    }, success: function(response) {
 
-						}else {
-							$("#editContent").fadeIn();
-							$("#viewContent").fadeOut();
-							$("#id").val(response.id);
-							$("#name").val(response.name);
-							$("#shortDescription").val(response.shortDescription);
-							$("#longDescription").val(response.longDescription);
-							$("#manageBtn").attr('value', 'Save change').attr('onclick', "namageData('update')")
-						}
-						    
-						$("#addCountry").modal('show');
-						$(".modal-title").html(response.name);
-						
+                        if (type == 'view') {
+                            $("#editContent").fadeOut();
+                            $("#viewContent").fadeIn();
+                            $("#shortDescriptionView").html(response.shortDescription);
+                            $("#longDescriptionView").html(response.longDescription);
+                            $("#manageBtn").fadeOut();
 
-						}
-					
-				})
-		}
+                        }else {
+                            $("#editContent").fadeIn();
+                            $("#viewContent").fadeOut();
+                            $("#id").val(response.id);
+                            $("#name").val(response.name);
+                            $("#shortDescription").val(response.shortDescription);
+                            $("#longDescription").val(response.longDescription);
+                            $("#manageBtn").attr('value', 'Save change').attr('onclick', "namageData('update')")
+                        }
+                            
+                        $("#addCountry").modal('show');
+                        $(".modal-title").html(response.name);
+                        
+
+                        }
+                    
+                })
+        }
 
 
 
 
-		function getAllData() {
+        function getAllData() {
 
-			$('.table').dataTable({
-	  		    "ajax":{
-	               url: "ajax.php", // json datasource
-	               type: "POST",   // connection method (default: GET)
-	               data:{
-	               	key: "getAllData"
-	               } 
-       			},
-       			"columns": [
-		            { "data": "id" },
-		            { "data": "name" },
-		            { "data": "action" }
-		            
-		        ]
-	  		});
-		 }
-		
-		function namageData(key){
-			
-			var name = $("#name");
-			var shortDescription= $("#shortDescription");
-			var longDescription= $("#longDescription");
-			var id = $("#id");
-			
-			if (isNotEmpty(name) &&  isNotEmpty(shortDescription) &&  isNotEmpty(longDescription)){
-				$.ajax({
-					url: 'ajax.php',
-					method: 'POST',
-					dataType: 'text',
-					data: {
-						key: key,
-						name: name.val(),
-						shortDescription: shortDescription.val(),
-						longDescription:  longDescription.val(),
-						id: id.val()
-					
-					}, success: function(response) {
+            $('.table').dataTable({
+                "ajax":{
+                   url: "ajax.php", // json datasource
+                   type: "POST",   // connection method (default: GET)
+                   data:{
+                    key: "getAllData"
+                   } 
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "action" }
+                    
+                ]
+            });
+         }
+        
+        function namageData(key){
+            
+            var name = $("#name");
+            var shortDescription= $("#shortDescription");
+            var longDescription= $("#longDescription");
+            var id = $("#id");
+            
+            if (isNotEmpty(name) &&  isNotEmpty(shortDescription) &&  isNotEmpty(longDescription)){
+                $.ajax({
+                    url: 'ajax.php',
+                    method: 'POST',
+                    dataType: 'text',
+                    data: {
+                        key: key,
+                        name: name.val(),
+                        shortDescription: shortDescription.val(),
+                        longDescription:  longDescription.val(),
+                        id: id.val()
+                    
+                    }, success: function(response) {
 
-						if(response != 'success'){
-							alert(response);
-							//$('#addCountry').modal('hide');
-							//$("#manageBtn").attr('value', 'Add').attr('onclick', "namageData('addNew')")
-						}else{
+                        if(response != 'success'){
+                            alert(response);
+                            //$('#addCountry').modal('hide');
+                            //$("#manageBtn").attr('value', 'Add').attr('onclick', "namageData('addNew')")
+                        }else{
 
-							name.val('');
+                            name.val('');
                             shortDescription.val('');
                             longDescription.val('');
-							$("#manageBtn").attr('value', 'Add').attr('onclick', "namageData('addNew')")
-						}
+                            $("#manageBtn").attr('value', 'Add').attr('onclick', "namageData('addNew')")
+                        }
 
-						$('#addCountry').modal('hide');
-						$('.table').DataTable().ajax.reload();
+                        $('#addCountry').modal('hide');
+                        $('.table').DataTable().ajax.reload();
 
-						}
-					
-				})
-			}
-			
-			
-		}
-		
-		function isNotEmpty(caller) {
-			
-			if (caller.val() == ''){
-				caller.css('border','1px solid red');
-				return false;
-			}else{
-				caller.css('border',''	);
-				return true;
-			}
-		}
-		
-	</script>	
+                        }
+                    
+                })
+            }
+            
+            
+        }
+        
+        function isNotEmpty(caller) {
+            
+            if (caller.val() == ''){
+                caller.css('border','1px solid red');
+                return false;
+            }else{
+                caller.css('border',''  );
+                return true;
+            }
+        }
+        
+    </script>   
 </body>
 </html>
